@@ -1,0 +1,84 @@
+struct process{
+    int pid,at,bt,ct,tat,wt,rt,st;
+};
+
+int cmp(const void *p1, const void *p2){
+
+    int a = ((struct process*)p1)->at;
+    int b = ((struct process*)p2)->at;
+
+    if(a<b)
+        return -1;
+    else
+        return 1;
+}
+
+int main(){
+
+    int n;
+    printf("\nEnter no of processes: ");
+    scanf("%d",&n);
+
+    struct process p[n];
+
+    for(int i=0;i<n;i++){
+        p[i].pid = i+1;
+        printf("\nEnter value of AT and BT for Process %d: ",i+1);
+        scanf("%d%d",&p[i].at,&p[i].bt);
+    }
+
+    qsort((void *)p ,n, sizeof(struct process),cmp);
+
+    float idle=0,ttat=0,atat=0,twt=0,awt=0,trt=0,art=0,cpu=0,throughput=0;
+    for(int i=0;i<n;i++){
+
+        if(i==0){
+            p[i].ct = p[i].at + p[i].bt;
+            p[i].st = p[i].at;
+        }
+        else if(p[i].at >= p[i-1].ct){
+            p[i].ct = p[i].at + p[i].bt;
+            p[i].st = p[i].at;
+            idle+= p[i].at - p[i-1].ct;
+        }
+        else{
+            p[i].ct = p[i-1].ct + p[i].bt;
+            p[i].st = p[i-1].ct;
+        }
+
+        p[i].tat = p[i].ct - p[i].at;
+        p[i].wt = p[i].tat - p[i].bt;
+        p[i].rt = p[i].st - p[i].at;
+
+        ttat+=p[i].tat;
+        twt+=p[i].wt;
+        trt+=p[i].rt;
+    }
+
+    atat = ttat/n;
+    awt = twt/n;
+    art = trt/n;
+
+    float cyclelength = p[n-1].ct - p[0].at;
+    cpu = ((cyclelength-idle)/cyclelength)*100;
+    throughput = n/cyclelength;
+
+    printf("\n\nPID\tAT\tBT\tCT\tTAT\tWT\tRT\n");
+    for(int i=0;i<n;i++){
+        printf("P%d\t%d\t%d\t%d\t%d\t%d\t%d\t\n",p[i].pid,p[i].at,p[i].bt,p[i].ct,p[i].tat,p[i].wt,p[i].rt);
+    }
+
+
+    printf("\n\nTotal Turn Around Time: %.2f",ttat);
+    printf("\nAverage Turn Around Time: %.2f",atat);
+    printf("\nTotal Waiting Time: %.2f",twt);
+    printf("\nTotal Avergae Waiting Time: %.2f",awt);
+    printf("\nTotal Response Time: %.2f",trt);
+    printf("\nTotal Avergae Response Time: %.2f",art);
+    printf("\nCPU Utilization(percent): %.2f",cpu);
+    printf("\nIdeal Time: %.2f",idle);
+    printf("\nThroughput Time: %.2f",throughput);
+    printf("\nCycle Length: %.2f",cyclelength);
+    printf("\nCPU Utilization: %.2f\n\n",cpu);
+
+}
