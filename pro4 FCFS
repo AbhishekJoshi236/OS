@@ -84,4 +84,5 @@ int main(){
     printf("\nCycle Length: %.2f",cyclelength);
     printf("\nCPU Utilization: %.2f\n\n",cpu);
 
+return 0;
 }
