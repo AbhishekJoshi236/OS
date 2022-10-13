@@ -84,7 +84,7 @@ int main(){
     awt=(float)twt/(float)n;
     art=(float)trt/(float)n;
     cpuUti=((float)(cycleLength-idealTime)/(float)cycleLength)*100;
-    throughPut=(float)cycleLength/(float)n;
+    throughPut=(float)n/(float)cycleLength;
     
     printf("\n\nPID\tAT\tBT\tCT\tTAT\tWT\tST\tRT\n");
     for(int i=0;i<n;i++){
