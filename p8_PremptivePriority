@@ -1,0 +1,55 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct process{
+    int at,bt,pt,ct,tat,wt,rt,st;
+};
+int main(){
+
+    int n;
+    printf("\nN: ");
+    scanf("%d",&n);
+
+    struct process p[n+1];
+    int temp[n];
+
+    for(int i=0;i<n;i++){
+        printf("\nAT,BT,PT: ");
+        scanf("%d%d%d",&p[i].at,&p[i].bt,&p[i].pt);
+
+        temp[i] = p[i].bt;
+    }
+
+    p[n].pt=10000;
+
+    int t=0,count=0;
+    for(t=0;count!=n;t++){
+
+        int val = n;
+        for(int i=0;i<n;i++){
+            if(p[i].pt < p[val].pt && temp[i]>0 && p[i].at<=t){
+                val=i;
+            }
+        }
+
+        if(temp[val]==p[val].bt){
+            p[val].st = t;
+        }
+
+        temp[val]--;
+        if(temp[val]==0){
+            count++;
+            p[val].ct = t+1;
+            p[val].tat = p[val].ct - p[val].at;
+            p[val].wt = p[val].tat - p[val].bt;
+            p[val].rt = p[val].st - p[val].at;
+        }
+    }
+
+
+    for(int i=0;i<n;i++){
+        printf("\nP%d\t%d\t%d\t%d\t%d\t%d\t%d\t",i+1,p[i].at,p[i].bt,p[i].ct,p[i].tat,p[i].wt,p[i].rt);
+    }
+
+    return 0;
+}
